@@ -3,6 +3,7 @@ import 'source-map-support/register'
 import { testTypes } from './testTypes'
 import type { FindFilter } from './utils'
 
+initPromiseRejectionHandler()
 cli()
 
 function cli() {
@@ -35,4 +36,11 @@ function parseArgs(): { filter: null | FindFilter; debug: boolean } {
     filter,
     debug
   }
+}
+
+function initPromiseRejectionHandler() {
+  process.on('unhandledRejection', function (err) {
+    console.error(err)
+    process.exit(1)
+  })
 }
