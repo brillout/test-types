@@ -1,7 +1,7 @@
 // @ts-ignore
 import 'source-map-support/register'
 import { testTypes } from './testTypes'
-import type { Filter } from './findTypescriptCode'
+import type { FindFilter } from './utils'
 
 cli()
 
@@ -10,7 +10,7 @@ function cli() {
   testTypes(filter)
 }
 
-function parseArgs(): { filter: null | Filter; debug: boolean } {
+function parseArgs(): { filter: null | FindFilter; debug: boolean } {
   let debug = false
   const terms: string[] = []
   let exclude = false
