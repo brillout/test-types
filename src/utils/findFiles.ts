@@ -72,11 +72,10 @@ function findFilesParseCliArgs(): { filter: null | FindFilter; debug: boolean } 
       ? null
       : {
           terms,
-          exclude
+          exclude,
         }
   return {
     filter,
-    debug
+    debug,
   }
 }
-

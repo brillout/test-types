@@ -12,7 +12,10 @@ async function testTypes(filter: null | FindFilter) {
     const checkTarget = tsCode.tsConfig ?? tsCode.tsFile
     const logMsg = `[TypeScript Check] ${checkTarget}`
     const done = logProgress(logMsg)
-    await runCommand(`npx tsc --noEmit --skipLibCheck --esModuleInterop ${tsCode.tsFile ?? ''}`, { cwd: tsRoot, timeout: 120 * 1000 })
+    await runCommand(`npx tsc --noEmit --skipLibCheck --esModuleInterop ${tsCode.tsFile ?? ''}`, {
+      cwd: tsRoot,
+      timeout: 120 * 1000,
+    })
     done()
     if (!isTTY) {
       console.log(logMsg)

@@ -26,7 +26,7 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
     tsCode.push({
       tsRoot,
       tsConfig,
-      tsFile: null
+      tsFile: null,
     })
     return tsRoot
   })
@@ -39,7 +39,7 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
     tsCode.push({
       tsRoot,
       tsConfig: null,
-      tsFile
+      tsFile,
     })
   })
 
