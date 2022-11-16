@@ -4,15 +4,15 @@ import path from 'path'
 import { findFiles, FindFilter } from './utils/findFiles'
 
 type TsCode = {
-  tsRoot: string
+  tsProjectRootDir: string
 } & (
   | {
-      tsConfig: string
-      tsFile: null
+      tsConfigFilePath: string
+      tsFilePath: null
     }
   | {
-      tsConfig: null
-      tsFile: string
+      tsConfigFilePath: null
+      tsFilePath: string
     }
 )
 
@@ -21,25 +21,27 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
 
   // Add all `tsconfig.json` directories
   const tsConfigFiles = await findFiles('**/tsconfig.json', filter)
-  const tsRoots = tsConfigFiles.map((tsConfig) => {
-    const tsRoot = path.dirname(tsConfig)
+  const tsRoots = tsConfigFiles.map((tsConfigFilePath) => {
+    const tsProjectRootDir = path.dirname(tsConfigFilePath)
     tsCode.push({
-      tsRoot,
-      tsConfig,
-      tsFile: null,
+      tsProjectRootDir,
+      tsConfigFilePath,
+      tsFilePath: null,
     })
-    return tsRoot
+    return tsProjectRootDir
   })
 
   // Add all `*.ts` files that don't have a `tsconfig.json`
   const tsFiles = await findFiles('**/*.ts', filter)
-  const tsFilesWithoutTsConfig = tsFiles.filter((tsFile) => !tsRoots.some((tsRoot) => tsFile.startsWith(tsRoot)))
-  tsFilesWithoutTsConfig.forEach((tsFile) => {
-    const tsRoot = path.dirname(tsFile)
+  const tsFilesWithoutTsConfig = tsFiles.filter(
+    (tsFilePath) => !tsRoots.some((tsProjectRootDir) => tsFilePath.startsWith(tsProjectRootDir))
+  )
+  tsFilesWithoutTsConfig.forEach((tsFilePath) => {
+    const tsProjectRootDir = path.dirname(tsFilePath)
     tsCode.push({
-      tsRoot,
-      tsConfig: null,
-      tsFile,
+      tsProjectRootDir,
+      tsConfigFilePath: null,
+      tsFilePath,
     })
   })
 
