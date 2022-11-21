@@ -10,9 +10,10 @@ async function testTypes(filter: null | FindFilter) {
 
   for (const tsCode of typescriptCode) {
     const { tsProjectRootDir } = tsCode
+    const config = loadTestTypescriptConfig(tsProjectRootDir)
+    if (config.disable) continue
     const cmd =
-      loadTestTypescriptConfig(tsProjectRootDir)?.testCommand ??
-      `npx tsc --noEmit --skipLibCheck --esModuleInterop ${tsCode.tsFilePath ?? ''}`.trim()
+      config.testCommand ?? `npx tsc --noEmit --skipLibCheck --esModuleInterop ${tsCode.tsFilePath ?? ''}`.trim()
     const logMsg = `[TypeScript Check] ${tsCode.tsConfigFilePath ?? tsCode.tsFilePath} (${cmd})`
     const done = logProgress(logMsg)
     await runCommand(cmd, {
@@ -26,18 +27,19 @@ async function testTypes(filter: null | FindFilter) {
   }
 }
 
-function loadTestTypescriptConfig(tsProjectRootDir: string): null | { testCommand: string } {
+function loadTestTypescriptConfig(tsProjectRootDir: string): { testCommand?: string; disable?: boolean } {
   let config: Record<string, unknown>
   try {
     config = require(`${tsProjectRootDir}/.testTypes.json`)
   } catch (err) {
     if ((err as any).code === 'MODULE_NOT_FOUND') {
-      return null
+      return {}
     }
     throw err
   }
   assert(Object.keys(config).length === 1)
-  const { testCommand } = config
-  assert(typeof testCommand === 'string')
-  return { testCommand }
+  const { testCommand, disable } = config
+  assert(testCommand === undefined || typeof testCommand === 'string')
+  assert(disable === undefined || typeof disable === 'boolean')
+  return { testCommand, disable }
 }
