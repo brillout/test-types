@@ -31,8 +31,9 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
     return tsProjectRootDir
   })
 
+  /* Turns out to be more annoying than helpful
   // Add all `*.ts` files that don't have a `tsconfig.json`
-  const tsFiles = await findFiles('**/*.ts', filter)
+  const tsFiles = await findFiles(['**', '*.ts'].join('/'), filter)
   const tsFilesWithoutTsConfig = tsFiles.filter(
     (tsFilePath) => !tsRoots.some((tsProjectRootDir) => tsFilePath.startsWith(tsProjectRootDir))
   )
@@ -44,6 +45,7 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
       tsFilePath,
     })
   })
+  //*/
 
   return tsCode
 }
