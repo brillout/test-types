@@ -13,7 +13,8 @@ async function testTypes(filter: null | FindFilter) {
     const config = loadTestTypescriptConfig(tsProjectRootDir)
     if (config.disable) continue
     const cmd =
-      config.testCommand ?? `npx tsc --noEmit --skipLibCheck --esModuleInterop ${tsCode.tsFilePath ?? ''}`.trim()
+      config.testCommand ??
+      `npx tsc --noEmit --emitDeclarationOnly false --skipLibCheck --esModuleInterop ${tsCode.tsFilePath ?? ''}`.trim()
     const logMsg = `[TypeScript Check] ${tsCode.tsConfigFilePath ?? tsCode.tsFilePath} (${cmd})`
     const done = logProgress(logMsg)
     await runCommand(cmd, {
