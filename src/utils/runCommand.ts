@@ -1,3 +1,4 @@
+import pc from '@brillout/picocolors'
 import { exec } from 'child_process'
 
 export { runCommand }
@@ -29,7 +30,7 @@ function runCommand(
         if (err) {
           console.error(err)
         }
-        throw new Error(`Command \`${cmd}\` failed [cwd: ${cwd}]`)
+        throw new Error(`Command \`${pc.bold(cmd)}\` failed [cwd: ${pc.bold(String(cwd))}]`)
       }
     } else {
       resolvePromise(stdout)

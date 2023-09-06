@@ -12,6 +12,7 @@
     "release": "npm version patch && npm publish && git push && git push --tags"
   },
   "dependencies": {
+    "@brillout/picocolors": "^1.0.9",
     "fast-glob": "^3.2.12",
     "source-map-support": "^0.5.21"
   },
