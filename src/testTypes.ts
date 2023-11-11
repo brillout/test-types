@@ -17,7 +17,7 @@ async function testTypes(filter: null | FindFilter) {
     const cmd =
       config.testCommand ??
       `npx tsc --noEmit --emitDeclarationOnly false --skipLibCheck --esModuleInterop ${tsCode.tsFilePath ?? ''}`.trim()
-    const logMsg = `[TypeScript Check] ${testPath} (${cmd})`
+    const logMsg = `${testPath} (${cmd})`
     const done = logProgress(logMsg)
     let err: Error | undefined
     try {
@@ -32,7 +32,7 @@ async function testTypes(filter: null | FindFilter) {
     if (isTTY) {
       done(!!err)
     } else {
-      console.log(logMsg)
+      console.log(`${err ? '❌' : '✅'} ${logMsg}`)
     }
     if (err) {
       console.error(err.message)
