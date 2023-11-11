@@ -41,9 +41,7 @@ async function testTypes(filter: null | FindFilter) {
 
   if (testPathsFailed.length > 0) {
     throw new Error(
-      ['Following TypeScript projects/files failed:', ...testPathsFailed.map((testPath) => ` ❌ ${testPath}`)].join(
-        '\n'
-      )
+      ['Following TypeScript check failed:', ...testPathsFailed.map((testPath) => ` ❌ ${testPath}`)].join('\n')
     )
   }
 }
