@@ -17,14 +17,21 @@ async function testTypes(filter: null | FindFilter) {
       `npx tsc --noEmit --emitDeclarationOnly false --skipLibCheck --esModuleInterop ${tsCode.tsFilePath ?? ''}`.trim()
     const logMsg = `[TypeScript Check] ${tsCode.tsConfigFilePath ?? tsCode.tsFilePath} (${cmd})`
     const done = logProgress(logMsg)
-    await runCommand(cmd, {
-      cwd: tsProjectRootDir,
-      timeout: 120 * 1000,
-    })
-    done()
-    if (!isTTY) {
+    let err: Error | undefined
+    try {
+      await runCommand(cmd, {
+        cwd: tsProjectRootDir,
+        timeout: 120 * 1000,
+      })
+    } catch (err_: any) {
+      err = err_
+    }
+    if (isTTY) {
+      done(!!err)
+    } else {
       console.log(logMsg)
     }
+    if (err) console.error(err.message)
   }
 }
 

@@ -7,7 +7,7 @@ function runCommand(
   cmd: string,
   { swallowError, timeout = 5000, cwd }: { swallowError?: true; timeout?: number; cwd?: string } = {}
 ): Promise<string> {
-  const { promise, resolvePromise } = genPromise<string>()
+  const { promise, resolvePromise, rejectPromise } = genPromise<string>()
 
   const t = setTimeout(() => {
     console.error(`Command call \`${cmd}\` timeout [${timeout / 1000} seconds][${cwd}].`)
@@ -30,7 +30,7 @@ function runCommand(
         if (err) {
           console.error(err)
         }
-        throw new Error(`Command \`${pc.bold(cmd)}\` failed [cwd: ${pc.bold(String(cwd))}]`)
+        rejectPromise(new Error(`Command \`${pc.bold(cmd)}\` failed [cwd: ${pc.bold(String(cwd))}]`))
       }
     } else {
       resolvePromise(stdout)
@@ -42,7 +42,7 @@ function runCommand(
 
 function genPromise<T>() {
   let resolvePromise!: (value: T) => void
-  let rejectPromise!: (value?: T) => void
+  let rejectPromise!: (value?: Error) => void
   const promise: Promise<T> = new Promise((resolve, reject) => {
     resolvePromise = resolve
     rejectPromise = reject
