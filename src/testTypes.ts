@@ -8,14 +8,16 @@ import assert from 'assert'
 async function testTypes(filter: null | FindFilter) {
   const typescriptCode = await findTypescriptCode(filter)
 
+  const testPathsFailed: string[] = []
   for (const tsCode of typescriptCode) {
     const { tsProjectRootDir } = tsCode
     const config = loadTestTypescriptConfig(tsProjectRootDir)
     if (config.disable) continue
+    const testPath = tsCode.tsConfigFilePath ?? tsCode.tsFilePath
     const cmd =
       config.testCommand ??
       `npx tsc --noEmit --emitDeclarationOnly false --skipLibCheck --esModuleInterop ${tsCode.tsFilePath ?? ''}`.trim()
-    const logMsg = `[TypeScript Check] ${tsCode.tsConfigFilePath ?? tsCode.tsFilePath} (${cmd})`
+    const logMsg = `[TypeScript Check] ${testPath} (${cmd})`
     const done = logProgress(logMsg)
     let err: Error | undefined
     try {
@@ -25,13 +27,24 @@ async function testTypes(filter: null | FindFilter) {
       })
     } catch (err_: any) {
       err = err_
+      testPathsFailed.push(testPath)
     }
     if (isTTY) {
       done(!!err)
     } else {
       console.log(logMsg)
     }
-    if (err) console.error(err.message)
+    if (err) {
+      console.error(err.message)
+    }
+  }
+
+  if (testPathsFailed.length > 0) {
+    throw new Error(
+      ['Following TypeScript projects/files failed:', ...testPathsFailed.map((testPath) => ` ❌ ${testPath}`)].join(
+        '\n'
+      )
+    )
   }
 }
 
