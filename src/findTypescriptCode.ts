@@ -48,7 +48,7 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
 
   if (setupErrors.length > 0) {
     setupErrors.forEach((err) => console.error(err))
-    assertUsage(false, 'Wrong setup, see error(s) printed above.')
+    assertUsage(false, `Wrong setup, see ${pc.bold(String(setupErrors.length))} error printed above.`)
   }
 
   /* Turns out to be more annoying than helpful
