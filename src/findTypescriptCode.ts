@@ -22,11 +22,21 @@ type TsCode = {
 async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> {
   const tsCode: TsCode[] = []
 
+  let setupErrors: unknown[] = []
+
   // Add all `tsconfig.json` directories
   const tsConfigFiles = await findFiles('**/tsconfig.json', filter)
   const tsRoots = tsConfigFiles.map((tsConfigFilePath) => {
     const tsProjectRootDir = path.dirname(tsConfigFilePath)
-    const isVueProject = getIsVueProject(tsProjectRootDir)
+
+    let isVueProject: boolean
+    try {
+      isVueProject = getIsVueProject(tsProjectRootDir)
+    } catch (err) {
+      setupErrors.push(err)
+      return
+    }
+
     tsCode.push({
       tsProjectRootDir,
       tsConfigFilePath,
@@ -35,6 +45,11 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
     })
     return tsProjectRootDir
   })
+
+  if (setupErrors.length > 0) {
+    setupErrors.forEach((err) => console.error(err))
+    assertUsage(false, 'Wrong setup, see error(s) printed above.')
+  }
 
   /* Turns out to be more annoying than helpful
   // Add all `*.ts` files that don't have a `tsconfig.json`
