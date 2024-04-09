@@ -5,7 +5,7 @@ export { runCommand }
 
 function runCommand(
   cmd: string,
-  { swallowError, timeout = 5000, cwd }: { swallowError?: true; timeout?: number; cwd?: string } = {}
+  { swallowError, timeout = 5000, cwd }: { swallowError?: true; timeout?: number; cwd?: string } = {},
 ): Promise<string> {
   const { promise, resolvePromise, rejectPromise } = genPromise<string>()
 

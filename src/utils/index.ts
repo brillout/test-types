@@ -1,3 +1,6 @@
 export * from './runCommand'
 export * from './findFiles'
 export * from './logProgress'
+export * from './assert'
+export * from './isObject'
+export * from './hasProp'
