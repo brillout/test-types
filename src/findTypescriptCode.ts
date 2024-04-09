@@ -65,7 +65,9 @@ function getIsVueProject(tsProjectRootDir: string): boolean {
   const deps = [...Object.keys(packageJson.dependencies || {}), ...Object.keys(packageJson.devDependencies || {})]
 
   const depMissing = (dep: 'typescript' | 'vue' | 'vue-tsc') =>
-    `${packageJsonFilePath} doesn't declare the ${pc.cyan(dep)} dependency. Make sure to add the ${pc.cyan(dep)} dependency to ${pc.cyan('package.json#dependencies')} or ${pc.cyan('packageJson.devDependencies')}.`
+    `${packageJsonFilePath} doesn't declare the ${pc.cyan(dep)} dependency. Make sure to add the ${pc.cyan(
+      dep,
+    )} dependency to ${pc.cyan('package.json#dependencies')} or ${pc.cyan('packageJson.devDependencies')}.`
   assertUsage(deps.includes('typescript'), depMissing('typescript'))
 
   const isVueProject = deps.includes('vue') || deps.includes('vue-tsc')

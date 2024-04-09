@@ -60,7 +60,9 @@ async function runTypescriptCheck(cmd: string, tsProjectRootDir: string) {
 }
 
 function getCmd(useVueTsc: boolean, tsFilePath?: string | null) {
-  return `npx ${useVueTsc ? 'vue-tsc' : 'tsc'} --noEmit --emitDeclarationOnly false --skipLibCheck --esModuleInterop ${tsFilePath ?? ''}`.trim()
+  return `npx ${useVueTsc ? 'vue-tsc' : 'tsc'} --noEmit --emitDeclarationOnly false --skipLibCheck --esModuleInterop ${
+    tsFilePath ?? ''
+  }`.trim()
 }
 
 function loadTestTypescriptConfig(tsProjectRootDir: string): { testCommand?: string; disable?: boolean } {
