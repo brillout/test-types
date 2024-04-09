@@ -1,6 +1,6 @@
 {
   "name": "@brillout/test-types",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "bin": "./bin.js",
   "scripts": {
     "// === Dev ===": "",
