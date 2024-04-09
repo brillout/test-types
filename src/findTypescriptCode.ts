@@ -71,7 +71,16 @@ async function findTypescriptCode(filter: null | FindFilter): Promise<TsCode[]> 
 }
 
 function getIsVueProject(tsProjectRootDir: string): boolean {
-  const packageJsonFilePath = require.resolve(path.join(tsProjectRootDir, './package.json'))
+  let packageJsonFilePath: string
+  try {
+    packageJsonFilePath = require.resolve(path.join(tsProjectRootDir, './package.json'))
+  } catch (err) {
+    // Returning `false`, otherwise I wouldn't know how to handle this:
+    // ```shell
+    // Error: Cannot find module '/home/runner/work/vike/vike/boilerplates/boilerplate-vue-ts/server/package.json'
+    // ```
+    return false
+  }
   const packageJson: unknown = JSON.parse(String(fs.readFileSync(packageJsonFilePath)))
   assert(isObject(packageJson))
 
