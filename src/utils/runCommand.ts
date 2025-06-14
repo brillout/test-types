@@ -1,7 +1,9 @@
+export { runCommand }
+
+// TO-DO/eventually: use @brillout/shell
+
 import pc from '@brillout/picocolors'
 import { exec } from 'child_process'
-
-export { runCommand }
 
 function runCommand(
   cmd: string,
