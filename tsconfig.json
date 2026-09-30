@@ -2,11 +2,12 @@
   "compilerOptions": {
     // Output
     "outDir": "./dist/",
+    "rootDir": "./src/",
     "target": "ES2020",
-    "module": "CommonJS",
+    "module": "Node16",
     "declaration": true,
     // Resolution
-    "moduleResolution": "Node",
+    "moduleResolution": "Node16",
     "esModuleInterop": true,
     // Strictness
     "strict": true,
@@ -14,6 +15,5 @@
     // Misc
     "skipLibCheck": true
   },
-  "rootDir": "./src/",
   "include": ["src/**/*"]
 }
